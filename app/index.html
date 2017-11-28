@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Object menagment</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="start.js"></script>
+    <style>
+        div {
+            margin: 12px
+        }
+
+        input {
+            margin: 5px
+        }
+    </style>
+</head>
+
+<body>
+    <div id='allObjects'>
+        <div>
+            <form id="createObjectForm">
+                <label for="name">Name</label>
+                <input id="nameCreate" name="name" type="text" />
+                <input type="submit" value="Create new object" />
+            </form>
+        </div>
+
+        <div>
+            <button id="btn-refresh-all-object" type="button">Refresh list</button>
+            <br></br>
+            <table id="objectTable" , border="solid" , cellpadding="10">
+                <tr id='tableHeader'>
+                    <th>Number</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id='viewObject' hidden='hidden'>
+        <div>
+            <button onclick="showAllObjects()">❮ Back</button>
+        </div>
+
+        <div>
+            <form id="updateObjectForm">
+                <label for="idView">Id</label>
+                <br>
+                <input id="idView" name="id" type="text" disabled='disabled' />
+                <br>
+                <label for="nameView">Name</label>
+                <br>
+                <input id="nameView" name="name" type="text" disabled='disabled' />
+                <br>
+                <input id='updateObj' hidden='hidden' type="submit" value="Update" />
+            </form>
+            <button id='allowEdit' onclick="lockEdit(false)">&#9998;Edit</button>
+        </div>
+    </div>
+</body>
+
+</html>
