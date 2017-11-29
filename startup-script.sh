@@ -1,7 +1,7 @@
 set -v
 
 # Talk to the metadata server to get the project id
-PROJECTID=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/js-in-compute-engine" -H "Metadata-Flavor: Google")
+PROJECTID=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
 
 # Install logging monitor. The monitor will automatically pick up logs sent to
 # syslog.
@@ -13,28 +13,29 @@ apt-get update
 apt-get install -yq ca-certificates git nodejs build-essential supervisor
 
 # Install nodejs
-mkdir /opt/nodejs
-curl https://nodejs.org/dist/v4.2.2/node-v4.2.2-linux-x64.tar.gz | tar xvzf - -C /opt/nodejs --strip-components=1
-ln -s /opt/nodejs/bin/node /usr/bin/node
-ln -s /opt/nodejs/bin/npm /usr/bin/npm
+mkdir /nodejs
+curl https://nodejs.org/dist/v4.2.2/node-v4.2.2-linux-x64.tar.gz | tar xvzf - -C /nodejs --strip-components=1
+ln -s /nodejs/bin/node /usr/bin/node
+ln -s /nodejs/bin/npm /usr/bin/npm
 
 # Get the application source code from the Google Cloud Repository.
 # git requires $HOME and it's not set during the startup script.
 export HOME=/root
 git config --global credential.helper gcloud.sh
-gcloud source repos clone GCP-Learning-frontend --project=js-in-compute-engine
+git clone https://github.com/RedMandMs/test-gcp-frontend.git
 
 # Install app dependencies
+cd test-gcp-frontend
 npm install
 
 # Create a nodeapp user. The application will run as this user.
 useradd -m -d /home/nodeapp nodeapp
-chown -R nodeapp:nodeapp /
+chown -R nodeapp:nodeapp /test-gcp-frontend
 
 # Configure supervisor to run the node app.
 cat >/etc/supervisor/conf.d/node-app.conf << EOF
 [program:nodeapp]
-directory=/
+directory=/test-gcp-frontend
 command=npm start
 autostart=true
 autorestart=true
